@@ -24,9 +24,12 @@
 		<fixcrlf srcdir="${base}" includes="${RootPackage}/**/*"/>
 	</target>
 
+	<target name="dependencycheck" description="Performs a dependency check">
+		<depend srcdir="${base}" destdir="${output}" cache="dependencies"/>
+	</target>
+
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${output}"/>
-		<depend srcdir="${base}" destdir="${output}" cache="dependencies"/>
 		<javac srcdir="${base}" includes="${RootPackage}/**/*.java" destdir="${output}" classpath="${classpath}"/>
 		<delete quiet="true" file="${output}/${RootPackage}/build.properties"/>
 		<echo file="${output}/${RootPackage}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
