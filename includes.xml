@@ -6,7 +6,7 @@
 		<property name="basedir" value="${homedir}/java/${ant.project.name}"/>
 		<property name="sourcedir" value="${basedir}/src"/>
 		<property name="outputdir" value="${basedir}/bin"/>
-		<property name="docsdir" value="${basedir}/docs/"/>
+		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="classpath" value="${java.home}/../lib/tools.jar:${outputdir}"/>
 	</target>
 		
