@@ -12,7 +12,6 @@
 		<property name="resdir" value="${basedir}/res"/>
 		<property name="libdir" value="${basedir}/webapp/WEB-INF/lib"/>
 		<path id="classpath">
-			<pathelement location="${java.home}/lib/rt.jar"/>
 			<pathelement location="${outputdir}"/>
 			<fileset dir="${homedir}/java/lib/${type}">
 				<include name="**/*.jar"/>

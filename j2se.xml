@@ -10,9 +10,8 @@
 		<property name="bindir" value="${basedir}/bin"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="resdir" value="${basedir}/res"/>
-		<property name="libdir" value="${libdir}/lib"/>
+		<property name="libdir" value="${basedir}/lib"/>
 		<path id="classpath">
-			<pathelement location="${java.home}/lib/rt.jar"/>
 			<pathelement location="${outputdir}"/>
 			<fileset dir="${homedir}/java/lib/${type}">
 				<include name="**/*.jar"/>

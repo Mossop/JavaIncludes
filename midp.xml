@@ -11,10 +11,12 @@
 		<property name="bindir" value="${basedir}/bin"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="resdir" value="${basedir}/res"/>
-		<property name="libdir" value="${libdir}/lib"/>
+		<property name="libdir" value="${basedir}/lib"/>
+		<mkdir dir="${resdir}"/>
+		<mkdir dir="${sourcedir}"/>
+		<mkdir dir="${libdir}"/>
 		<path id="classpath">
-			<pathelement location="${java.home}/lib/rt.jar"/>
-			<pathelement location="${outputdir}"/>
+			<pathelement location="${tmpoutputdir}"/>
 			<fileset dir="${homedir}/java/lib/${type}">
 				<include name="**/*.jar"/>
 			</fileset>
@@ -28,11 +30,13 @@
 	<target name="Linux" if="isLinux" description="Sets up linux specific stuff">
 		<echo message="Setting up for Linux"/>
 		<property name="homedir" value="${user.home}"/>
+		<property name="preverifyexe" value="${java.home}/../../wtk1.0.4/bin/preverify"/>
 	</target>
 
 	<target name="Windows" unless="isLinux" description="Sets up windows specific stuff">
 		<echo message="Setting up for Windows"/>
 		<property name="homedir" value="${user.home}/My Documents"/>
+		<property name="preverifyexe" value="${java.home}/../../wtk1.0.4/bin/preverify.exe"/>
 	</target>
 
 	<target name="basefix" depends="setup" description="Fixes crlfs in source files">
@@ -45,12 +49,24 @@
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${tmpoutputdir}"/>
-		<mkdir dir="${outputdir}"/>
-		<mkdir dir="${resdir}"/>
-		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/wtklib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" source="1.4">
+		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/lib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" source="1.4">
 			<classpath refid="classpath"/>
 		</javac>
-		<delete quiet="true" file="${outputdir}/build.properties"/>
+		<mkdir dir="${outputdir}"/>
+		<path id="verifypath">
+			<path refid="classpath"/>
+			<pathelement location="${java.home}/../../wtk1.0.4/lib/midpapi.zip"/>
+		</path>
+		<property name="verifypath" refid="verifypath"/>
+		<echo message="Classpath: ${verifypath}"/>
+		<exec executable="${preverifyexe}" dir="${basedir}" failonerror="yes">
+			<arg value="-d"/>
+			<arg file="${outputdir}"/>
+			<arg value="-classpath"/>
+			<arg path="${verifypath}"/>
+			<arg file="${tmpoutputdir}"/>
+		</exec>
+		<delete quiet="true" file="${resdir}/build.properties"/>
 		<echo file="${resdir}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
 		<echo file="${resdir}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
 	</target>
@@ -61,6 +77,13 @@
 			<fileset dir="${outputdir}"/>
 			<fileset dir="${resdir}"/>
 		</jar>
+		<property file="${sourcedir}/manifest" prefix="manifest."/>
+		<delete quiet="true" file="${bindir}/${ant.project.name}.jad"/>
+		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Name: ${manifest.MIDlet-Name}${line.separator}</echo>
+		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Version: ${manifest.MIDlet-Version}${line.separator}</echo>
+		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Vendor: ${manifest.MIDlet-Vendor}${line.separator}</echo>
+		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Jar-URL: ${ant.project.name}.jar${line.separator}</echo>
+		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Jar-Size: 0${line.separator}</echo>
 	</target>
 
 	<target name="basedocs" depends="setup" description="Extracts the documentation">
