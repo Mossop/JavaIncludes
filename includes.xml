@@ -1,0 +1,52 @@
+	<property name="is${os.name}" value="true"/>
+	
+	<target name="setup" description="Basic target that all must eventually use" depends="Linux,Windows">
+		<echo message="Setting up basic properties"/>
+		<tstamp/>
+		<property name="base" value="${homedir}/jprogs/${ant.project.name}"/>
+		<property name="output" value="${homedir}/java"/>
+		<property name="docsdir" value="${homedir}/docs/${ant.project.name}"/>
+		<property name="classpath" value="${java.home}/../lib/tools.jar:${output}"/>
+		<property name="RootPackage" value="com/esp/${AppName}"/>
+	</target>
+		
+	<target name="Linux" if="isLinux" description="Sets up linux specific stuff">
+		<echo message="Setting up for Linux"/>
+		<property name="homedir" value="${user.home}"/>
+	</target>
+
+	<target name="Windows" unless="isLinux" description="Sets up windows specific stuff">
+		<echo message="Setting up for Windows"/>
+		<property name="homedir" value="${user.home}/My Documents"/>
+	</target>
+
+	<target name="fix" depends="setup" description="Fixes crlfs in source files">
+		<fixcrlf srcdir="${base}" includes="${RootPackage}/**/*"/>
+	</target>
+
+	<target name="basebuild" depends="setup" description="Performs the basic build">
+		<mkdir dir="${output}"/>
+		<javac srcdir="${base}" includes="${RootPackage}/**/*.java" destdir="${output}" classpath="${classpath}"/>
+		<delete quiet="true" file="${output}/${RootPackage}/build.properties"/>
+		<echo file="${output}/${RootPackage}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
+		<echo file="${output}/${RootPackage}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
+	</target>
+
+	<target name="basepackage" depends="basebuild" description="Packages up the code">
+		<jar jarfile="${base}/${ant.project.name}.jar" basedir="${output}" includes="${RootPackage}/**/*" manifest="${base}/manifest"/>
+	</target>
+
+	<target name="basedocs" depends="setup" description="Extracts the documentation">
+		<delete dir="${docsdir}"/>
+		<mkdir dir="${docsdir}"/>
+		<javadoc sourcepath="${base}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.esp.*"/>
+	</target>
+
+	<target name="cvsupdate" depends="setup">
+		<cvs quiet="true" command="update" cvsroot=":pserver:tawemud@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${base}/.."/>
+	</target>
+
+	<target name="cvscommit" depends="cvsupdate">
+		<cvs quiet="true" command="commit" cvsroot=":pserver:tawemud@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${base}/.."/>
+	</target>
+
