@@ -20,7 +20,7 @@
 		<property name="homedir" value="${user.home}/My Documents"/>
 	</target>
 
-	<target name="fix" depends="setup" description="Fixes crlfs in source files">
+	<target name="basefix" depends="setup" description="Fixes crlfs in source files">
 		<fixcrlf srcdir="${base}" includes="${RootPackage}/**/*"/>
 	</target>
 
