@@ -48,10 +48,10 @@
 	</target>
 
 	<target name="cvsupdate" depends="setup">
-		<cvs quiet="true" command="update" cvsroot=":pserver:dave@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${basedir}"/>
+		<cvs quiet="true" command="update" package="${ant.project.name}" dest="${basedir}"/>
 	</target>
 
 	<target name="cvscommit" depends="cvsupdate">
-		<cvs quiet="true" command="commit" cvsroot=":pserver:dave@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${basedir}"/>
+		<cvs quiet="true" command="commit" package="${ant.project.name}" dest="${basedir}"/>
 	</target>
 
