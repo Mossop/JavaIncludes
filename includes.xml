@@ -43,7 +43,7 @@
 	<target name="basedocs" depends="setup" description="Extracts the documentation">
 		<delete dir="${docsdir}"/>
 		<mkdir dir="${docsdir}"/>
-		<javadoc sourcepath="${sourcedir}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.*" additionalparam="-source 1.4" verbose="yes"/>
+		<javadoc sourcepath="${sourcedir}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.*" additionalparam="-source 1.4"/>
 	</target>
 
 	<target name="cvsupdate" depends="setup">
