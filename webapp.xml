@@ -10,8 +10,17 @@
 		<property name="bindir" value="${basedir}/bin"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="resdir" value="${basedir}/res"/>
-		<property name="libdir" value="${libdir}/webapp/WEB-INF/lib"/>
-		<property name="classpath" value="${java.home}/jre/lib/rt.jar:${outputdir}:${homedir}/java/lib/${type}:${libdir}"/>
+		<property name="libdir" value="${basedir}/webapp/WEB-INF/lib"/>
+		<path id="classpath">
+			<pathelement location="${java.home}/lib/rt.jar"/>
+			<pathelement location="${outputdir}"/>
+			<fileset dir="${homedir}/java/lib/${type}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${libdir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
 		<echo message="Using ${type} profile"/>
 	</target>
 		
@@ -35,7 +44,9 @@
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${outputdir}"/>
-		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" classpath="${classpath}" source="1.4"/>
+		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" source="1.4">
+			<classpath refid="classpath"/>
+		</javac>
 		<delete quiet="true" file="${outputdir}/build.properties"/>
 		<echo file="${resdir}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
 		<echo file="${resdir}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
@@ -52,7 +63,9 @@
 	<target name="basedocs" depends="setup" description="Extracts the documentation">
 		<delete dir="${docsdir}"/>
 		<mkdir dir="${docsdir}"/>
-		<javadoc sourcepath="${sourcedir}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.*" additionalparam="-breakiterator -source 1.4"/>
+		<javadoc sourcepath="${sourcedir}" destdir="${docsdir}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.*" additionalparam="-breakiterator -source 1.4">
+			<classpath refid="classpath"/>
+		</javadoc>
 	</target>
 
 	<target name="cvsupdate" depends="setup">
