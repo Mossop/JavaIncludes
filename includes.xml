@@ -1,13 +1,14 @@
 	<property name="is${os.name}" value="true"/>
-	
+	<property name="Company" value="esp"/>
+
 	<target name="setup" description="Basic target that all must eventually use" depends="Linux,Windows">
 		<echo message="Setting up basic properties"/>
 		<tstamp/>
-		<property name="base" value="${homedir}/jprogs/${ant.project.name}"/>
-		<property name="output" value="${homedir}/java"/>
-		<property name="docsdir" value="${homedir}/docs/${ant.project.name}"/>
-		<property name="classpath" value="${java.home}/../lib/tools.jar:${output}"/>
-		<property name="RootPackage" value="com/esp/${AppName}"/>
+		<property name="basedir" value="${homedir}/java/${ant.project.name}"/>
+		<property name="sourcedir" value="${basedir}/src"/>
+		<property name="outputdir" value="${basedir}/bin"/>
+		<property name="docsdir" value="${basedir}/doc/"/>
+		<property name="classpath" value="${java.home}/../lib/tools.jar:${outputdir}"/>
 	</target>
 		
 	<target name="Linux" if="isLinux" description="Sets up linux specific stuff">
@@ -25,32 +26,32 @@
 	</target>
 
 	<target name="dependencycheck" description="Performs a dependency check">
-		<depend srcdir="${base}" destdir="${output}" cache="dependencies"/>
+		<depend srcdir="${sourcedir}" destdir="${outputdir}" cache="dependencies"/>
 	</target>
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
-		<mkdir dir="${output}"/>
-		<javac srcdir="${base}" includes="${RootPackage}/**/*.java" destdir="${output}" classpath="${classpath}"/>
-		<delete quiet="true" file="${output}/${RootPackage}/build.properties"/>
-		<echo file="${output}/${RootPackage}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
-		<echo file="${output}/${RootPackage}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
+		<mkdir dir="${outputdir}"/>
+		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" classpath="${classpath}" source="1.4"/>
+		<delete quiet="true" file="${outputdir}/build.properties"/>
+		<echo file="${outputdir}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
+		<echo file="${outputdir}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
 	</target>
 
 	<target name="basepackage" depends="basebuild" description="Packages up the code">
-		<jar jarfile="${base}/${ant.project.name}.jar" basedir="${output}" includes="${RootPackage}/**/*" manifest="${base}/manifest"/>
+		<jar jarfile="${basedir}/${ant.project.name}.jar" basedir="${outputdir}" includes="**/*" manifest="${sourcedir}/manifest"/>
 	</target>
 
 	<target name="basedocs" depends="setup" description="Extracts the documentation">
 		<delete dir="${docsdir}"/>
 		<mkdir dir="${docsdir}"/>
-		<javadoc sourcepath="${base}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.esp.*"/>
+		<javadoc sourcepath="${sourcedir}" destdir="${docsdir}" classpath="${classpath}" private="true" use="true" author="true" version="true" windowtitle="${ant.project.name}" packagenames="com.${Company}.*"/>
 	</target>
 
 	<target name="cvsupdate" depends="setup">
-		<cvs quiet="true" command="update" cvsroot=":pserver:tawemud@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${base}/.."/>
+		<cvs quiet="true" command="update" cvsroot=":pserver:dave@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${basedir}"/>
 	</target>
 
 	<target name="cvscommit" depends="cvsupdate">
-		<cvs quiet="true" command="commit" cvsroot=":pserver:tawemud@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${base}/.."/>
+		<cvs quiet="true" command="commit" cvsroot=":pserver:dave@eeguinness.swan.ac.uk:/usr/local/cvsroot" package="${ant.project.name}" dest="${basedir}"/>
 	</target>
 
