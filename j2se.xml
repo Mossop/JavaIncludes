@@ -3,14 +3,14 @@
 	<target name="setup" description="Basic target that all must eventually use" depends="Linux,Windows">
 		<echo message="Setting up basic properties"/>
 		<tstamp/>
-		<property name="type" value="webapp"/>
+		<property name="type" value="j2se"/>
 		<property name="basedir" value="${homedir}/java/${ant.project.name}"/>
 		<property name="sourcedir" value="${basedir}/src"/>
-		<property name="outputdir" value="${basedir}/webapp/WEB-INF/classes"/>
+		<property name="outputdir" value="${basedir}/classes"/>
 		<property name="bindir" value="${basedir}/bin"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="resdir" value="${basedir}/res"/>
-		<property name="libdir" value="${libdir}/webapp/WEB-INF/lib"/>
+		<property name="libdir" value="${libdir}/lib"/>
 		<property name="classpath" value="${java.home}/jre/lib/rt.jar:${outputdir}:${homedir}/java/lib/${type}:${libdir}"/>
 		<echo message="Using ${type} profile"/>
 	</target>

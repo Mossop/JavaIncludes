@@ -3,14 +3,15 @@
 	<target name="setup" description="Basic target that all must eventually use" depends="Linux,Windows">
 		<echo message="Setting up basic properties"/>
 		<tstamp/>
-		<property name="type" value="webapp"/>
+		<property name="type" value="midp"/>
 		<property name="basedir" value="${homedir}/java/${ant.project.name}"/>
 		<property name="sourcedir" value="${basedir}/src"/>
-		<property name="outputdir" value="${basedir}/webapp/WEB-INF/classes"/>
+		<property name="tmpoutputdir" value="${basedir}/tmpclasses"/>
+		<property name="outputdir" value="${basedir}/classes"/>
 		<property name="bindir" value="${basedir}/bin"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
 		<property name="resdir" value="${basedir}/res"/>
-		<property name="libdir" value="${libdir}/webapp/WEB-INF/lib"/>
+		<property name="libdir" value="${libdir}/lib"/>
 		<property name="classpath" value="${java.home}/jre/lib/rt.jar:${outputdir}:${homedir}/java/lib/${type}:${libdir}"/>
 		<echo message="Using ${type} profile"/>
 	</target>
@@ -34,8 +35,9 @@
 	</target>
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
+		<mkdir dir="${tmpoutputdir}"/>
 		<mkdir dir="${outputdir}"/>
-		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" classpath="${classpath}" source="1.4"/>
+		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/wtklib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" classpath="${classpath}" source="1.4"/>
 		<delete quiet="true" file="${outputdir}/build.properties"/>
 		<echo file="${resdir}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
 		<echo file="${resdir}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
@@ -64,6 +66,7 @@
 	</target>
 
 	<target name="clean" depends="setup">
+		<delete dir="${tmpoutputdir}" failonerror="false"/>
 		<delete dir="${outputdir}" failonerror="false"/>
 		<delete dir="${docsdir}" failonerror="false"/>
 		<delete file="${bindir}/${ant.project.name}.jar" failonerror="false"/>
