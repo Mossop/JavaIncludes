@@ -7,7 +7,7 @@
 		<property name="sourcedir" value="${basedir}/src"/>
 		<property name="outputdir" value="${basedir}/webapp/WEB-INF/classes"/>
 		<property name="docsdir" value="${basedir}/docs/api/"/>
-		<property name="classpath" value="${java.home}/../lib/tools.jar:/usr/java/jakarta-tomcat-4.0.4/common/lib/servlet.jar:${outputdir}"/>
+		<property name="classpath" value="${java.home}/../lib/tools.jar:/usr/java/jakarta-tomcat-4.0.4/common/lib/servlet.jar:/usr/java/oreilly-servlet/lib/cos.jar${outputdir}"/>
 	</target>
 		
 	<target name="Linux" if="isLinux" description="Sets up linux specific stuff">
