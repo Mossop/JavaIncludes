@@ -1,3 +1,5 @@
+	<taskdef name="updatejad" classname="com.stampysoft.ant.j2me.UpdateJARSizeTask" />
+
 	<property name="is${os.name}" value="true"/>
 
 	<target name="setup" description="Basic target that all must eventually use" depends="Linux,Windows">
@@ -49,7 +51,7 @@
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${tmpoutputdir}"/>
-		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/lib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" source="1.4">
+		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/lib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" target="1.1">
 			<classpath refid="classpath"/>
 		</javac>
 		<mkdir dir="${outputdir}"/>
@@ -58,7 +60,6 @@
 			<pathelement location="${java.home}/../../wtk1.0.4/lib/midpapi.zip"/>
 		</path>
 		<property name="verifypath" refid="verifypath"/>
-		<echo message="Classpath: ${verifypath}"/>
 		<exec executable="${preverifyexe}" dir="${basedir}" failonerror="yes">
 			<arg value="-d"/>
 			<arg file="${outputdir}"/>
@@ -84,6 +85,7 @@
 		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Vendor: ${manifest.MIDlet-Vendor}${line.separator}</echo>
 		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Jar-URL: ${ant.project.name}.jar${line.separator}</echo>
 		<echo file="${bindir}/${ant.project.name}.jad" append="yes">MIDlet-Jar-Size: 0${line.separator}</echo>
+		<updatejad jad="${bindir}/${ant.project.name}.jad"/>
 	</target>
 
 	<target name="basedocs" depends="setup" description="Extracts the documentation">
