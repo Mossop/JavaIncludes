@@ -44,6 +44,7 @@
 
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${outputdir}"/>
+		<mkdir dir="${resdir}"/>
 		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" source="1.4">
 			<classpath refid="classpath"/>
 		</javac>

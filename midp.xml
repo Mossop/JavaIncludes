@@ -46,6 +46,7 @@
 	<target name="basebuild" depends="setup" description="Performs the basic build">
 		<mkdir dir="${tmpoutputdir}"/>
 		<mkdir dir="${outputdir}"/>
+		<mkdir dir="${resdir}"/>
 		<javac srcdir="${sourcedir}" bootclasspath="${java.home}/../../wtk1.0.4/wtklib/midpapi.zip" includes="**/*.java" destdir="${tmpoutputdir}" source="1.4">
 			<classpath refid="classpath"/>
 		</javac>
