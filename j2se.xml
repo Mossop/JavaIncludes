@@ -47,8 +47,8 @@
 		<javac srcdir="${sourcedir}" includes="**/*.java" destdir="${outputdir}" source="1.4">
 			<classpath refid="classpath"/>
 		</javac>
-		<delete quiet="true" file="${outputdir}/build.properties"/>
-		<echo file="${resdir}/build.properties" append="yes">build.date=${DSTAMP}${line.separator}</echo>
+		<delete quiet="true" file="${resdir}/build.properties"/>
+		<echo file="${resdir}/build.properties" append="no">build.date=${DSTAMP}${line.separator}</echo>
 		<echo file="${resdir}/build.properties" append="yes">build.time=${TSTAMP}${line.separator}</echo>
 	</target>
 
